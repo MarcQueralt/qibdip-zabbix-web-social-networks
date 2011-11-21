@@ -1,0 +1,9 @@
+qibdip Zabbix Web and Social Networks
+by qibdip 
+
+Allows to scan the web by means of Zabbix in order to evaluate the web presence and also social networks value.
+
+The scripts and they usage is explained:
+* reviews_yelp.sh	Gets the number of reviews on yelp.
+			Parameters: 
+			* yelp identifier (is the text immediately after http://www.yelp.com/biz/)
