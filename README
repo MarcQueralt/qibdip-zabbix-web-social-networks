@@ -1,9 +1,16 @@
 qibdip Zabbix Web and Social Networks
 by qibdip 
+version 1.2
 
 Allows to scan the web by means of Zabbix in order to evaluate the web presence and also social networks value.
+Requires lynx browser installed
 
 The scripts and they usage is explained:
 * reviews_yelp.sh	Gets the number of reviews on yelp.
 			Parameters: 
+			* monitoring server address
 			* yelp identifier (is the text immediately after http://www.yelp.com/biz/)
+* google_query_count	Gets the number of results on a google query.
+			Parameters:
+			* monitored server address
+			* query should be URLEncoded
