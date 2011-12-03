@@ -1,0 +1,119 @@
+<?php
+define(QIBDIP_TIMEOUT,5);
+/**
+ * retrieves a webpage based on its url
+ * @param string $url url to retrieve
+ * @return mixed an structured object containing html, info and error
+ * @uses curl_init
+ * @uses curl_setopt
+ * @uses curl_exec
+ * @uses curl_getinfo
+ * @uses curl_error
+ * @uses curl_close
+ * @since 1.3
+ */
+function qibdip_get_webpage($url) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, QIBDIP_TIMEOUT);
+
+    $result['html'] = curl_exec($ch);
+    $result['info'] = curl_getinfo($ch);
+    $result['error'] = curl_error($ch);
+
+    curl_close($ch);
+
+    return $result;
+}
+/**
+ * creates an url that sends a query to google search
+ * @param string $query the query to be sent to google
+ * @return string the url to retrieve
+ * @since 1.3
+ */
+function qibdip_url_google_search($query) {
+    $url="http://www.google.com/search?q=".$query;
+    $url.="&num=100";
+    $url.="&hl=en";
+    $url.="&safe=off";
+    $url.="&pws=0";  //no personalization
+//    $url.="&filter=0"; //filter duplicates 0 means do not filter
+    return $url;
+}
+/**
+ * returns the regex required to identify a result in a google SERP
+ * @return string
+ * @since 1.3
+ */
+function qibdip_regex_google_search_result() {
+    return '/<li .*?class="g"><h3\b[^>]*>(.*?)<\/h3>/';
+}
+/**
+ * Calculate the rank of first appearance of $text in $web after application of $regex
+ * @param string $web the url to parse
+ * @param string $text the text to search
+ * @param string $regex the regular expression to apply
+ * @param string $notfound the value to return in case of no match
+ * @return string
+ * @since 1.3
+ */
+function qibdip_get_rank($web,$text,$regex,$notfound=101) {
+    preg_match_all($regex, $web, $matches);
+    $found=false;
+    $rank=0;
+    $matches=$matches[0];
+    $m=array_shift($matches);
+    while(($m)&&(!$found)):
+//        echo "match:".print_r($m,true)."\nrank:".$rank."\nfound:".$found."\n\n";
+        $found=!(stristr($m, $text) === FALSE);
+        $rank+=1;
+        $m=array_shift($matches);
+    endwhile;
+    if(!$found):
+        $rank=$notfound;
+    endif;
+    return $rank;
+}
+/**
+ * Verify that argument number is the expected and raise an error message when needed.
+ * @param integer $num the num of expected arguments
+ * @param string $message the message to show in case of error
+ * @return boolean the argument number equals $num
+ * @since 1.3
+ */
+function qibdip_verify_argument_number($num,$message="Error!\n") {
+    if($_SERVER['argc']==$num+1):
+        return true;
+    else:
+        echo $message;
+        return false;
+    endif;
+}
+/**
+ * Returns a command line argument
+ * @param integer $num number of the argument to seek 1 for first (not 0).
+ * @return mixed the argument value
+ * @since 1.3
+ */
+function qibdip_argument($num) {
+    return $_SERVER['argv'][$num];
+}
+/**
+ * returns the regex required to identify the result count in a google SERP
+ * @return string
+ * @since 1.4
+ */
+function qibdip_regex_google_search_count() {
+    return '/<div>results .*of [about ]*.([,0123456789]*).*from/i';
+}
+
+
+function qibdip_get_count($html,$regex) {
+    if(preg_match($regex, $html,$matches)):
+            $resultat=$matches[0];
+    endif;
+    //print_r($matches);
+    return $resultat;
+}
+?>
