@@ -1,4 +1,7 @@
 <?php
+/**
+ * version 1.4
+ */
 define(QIBDIP_TIMEOUT,5);
 /**
  * retrieves a webpage based on its url
@@ -115,5 +118,38 @@ function qibdip_get_count($html,$regex) {
     endif;
     //print_r($matches);
     return $resultat;
+}
+
+/**
+ * gets the url to ask for likes at facebook
+ * @param string $id page id uses to be a long number but also works with vanity name
+ * @return string
+ * @since 1.4
+ */
+function qibdip_facebook_graph_url($id) {
+    return "http://graph.facebook.com/".$id;
+}
+
+/**
+ * returns the likes in a json object
+ * @param mixed $json the json object
+ * @return the value of likes
+ */
+function qibdip_facebook_likes($json) {
+    return qibdip_facebook_json_parse($json, 'likes');
+}
+/**
+ * gets the attribute described by attr from a json object
+ * @param mixed $json the json object to parse
+ * @param string $attr the attribute to search for
+ * @return string
+ * @since v1.4
+ */
+function qibdip_facebook_json_parse($json,$attr) {
+    $decoded=json_decode($json, true);
+    if(!isset($decoded[$attr])):
+        exit(1);
+    endif;
+    return $decoded[$attr];
 }
 ?>

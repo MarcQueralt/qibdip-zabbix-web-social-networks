@@ -1,26 +1,31 @@
 qibdip Zabbix Web and Social Networks
-by qibdip 
+by qibdip
 version 1.3
 
 Allows to scan the web by means of Zabbix in order to evaluate the web presence and also social networks value.
 Requires lynx browser installed
 
 The scripts and they usage is explained:
-* reviews_yelp.sh	Gets the number of reviews on yelp.
-			Parameters: 
-			* monitoring server address
-			* yelp identifier (is the text immediately after http://www.yelp.com/biz/)
-* google_query_count.sh	Gets the number of results on a google query.
-			Parameters:
-			* monitored server address
-			* query should be URLEncoded
-* google_query_rank.sh  Gets the rank of text in google SERP
-                        Parameters:
-                        * monitoring server addres
-                        * google query
-                        * text
+* reviews_yelp.sh Gets the number of reviews on yelp.
+    Parameters:
+    * monitoring server address
+    * yelp identifier (is the text immediately after http://www.yelp.com/biz/)
+* google_query_count.sh Gets the number of results on a google query.
+    Parameters:
+    * monitored server address
+    * query should be URLEncoded
+* google_query_rank.sh Gets the rank of text in google SERP
+    Parameters:
+    * monitoring server address
+    * google query
+    * text
+* facebook_like.sh Gets the number of likes from a facebook fan page
+    Parameters:
+    *monitoring server address
+    *fan page id or vanity url
+
 Change History
-1.4 1/12/2011 google_query_count.sh migrated to php
+1.4 20/12/2011 facebook likes monitoring
 1.3 30/11/2011 migration to php. google_query_rank
 1.2 google_query_count.sh
 1.1 review_yelp.sh
