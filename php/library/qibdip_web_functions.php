@@ -1,7 +1,7 @@
 <?php
 
 /**
- * version 1.5
+ * version 1.6
  */
 define(QIBDIP_TIMEOUT, 5);
 
@@ -176,9 +176,21 @@ function qibdip_facebook_likes($json) {
  * @param mixed $json the json object to parse
  * @param string $attr the attribute to search for
  * @return string
+ * @deprecated
  * @since v1.4
  */
 function qibdip_facebook_json_parse($json, $attr) {
+    return qibdip_json_parse($json, $attr);
+}
+
+/**
+ * gets the attribute described by attr from a json object
+ * @param mixed $json the json object to parse
+ * @param string $attr the attribute to search for
+ * @return string
+ * @since v1.6
+ */
+function qibdip_json_parse($json, $attr) {
     $decoded = json_decode($json, true);
     if (!isset($decoded[$attr])):
         return 0;
@@ -186,4 +198,13 @@ function qibdip_facebook_json_parse($json, $attr) {
     return $decoded[$attr];
 }
 
+/**
+ * creates the twitter url for the user
+ * @param string $user username without @ 
+ * @return string
+ * @since 1.6
+ */
+function qibdip_twitter_url($user) {
+    return 'http://api.twitter.com/1/users/show.json?screen_name='.$user;
+}
 ?>

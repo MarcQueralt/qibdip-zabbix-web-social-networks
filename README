@@ -1,6 +1,6 @@
 qibdip Zabbix Web and Social Networks
 by qibdip
-version 1.5
+version 1.6
 
 Allows to scan the web by means of Zabbix in order to evaluate the web presence and also social networks value.
 Requires lynx browser installed
@@ -28,6 +28,14 @@ The scripts and they usage is explained:
     Parameters: idem facebook_like.sh
 * facebook_talking.sh Gets the number of people talking about a facebook page
     Parameters: idem facebook_like.sh
+* twitter_followers.sh Gets the number of followers from a twitter user
+    Parameters:
+    * Monitoring server address
+    * Username without inital @
+* twitter_tweets.sh: get the number of tweets posted by the user
+    Parameters: idem twitter_followers.sh
+* twitter_following.sh: get the number of people been followed by the user.
+    Parameters: idem twitter_followers.
 
 Change History
 1.5 22/12/2011 facebook checkin and talking about monitoring
