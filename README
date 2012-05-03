@@ -23,8 +23,13 @@ The scripts and they usage is explained:
     Parameters:
     *monitoring server address
     *fan page id or vanity url
+* facebook_checkin.sh Gets the number of checkins from a facebook page
+    Parameters: idem facebook_like.sh
+* facebook_talking.sh Gets the number of people talking about a facebook page
+    Parameters: idem facebook_like.sh
 
 Change History
+1.5 22/12/2011 facebook checkin and talking about monitoring
 1.4 20/12/2011 facebook likes monitoring
 1.3 30/11/2011 migration to php. google_query_rank
 1.2 google_query_count.sh

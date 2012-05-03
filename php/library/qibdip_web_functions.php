@@ -1,8 +1,10 @@
 <?php
+
 /**
- * version 1.4
+ * version 1.5
  */
-define(QIBDIP_TIMEOUT,5);
+define(QIBDIP_TIMEOUT, 5);
+
 /**
  * retrieves a webpage based on its url
  * @param string $url url to retrieve
@@ -29,21 +31,26 @@ function qibdip_get_webpage($url) {
 
     return $result;
 }
+
 /**
  * creates an url that sends a query to google search
  * @param string $query the query to be sent to google
  * @return string the url to retrieve
  * @since 1.3
  */
-function qibdip_url_google_search($query) {
-    $url="http://www.google.com/search?q=".$query;
+function qibdip_url_google_search($query,$lang=null) {
+    $url = "http://www.google.com/search?q=" . $query;
     $url.="&num=100";
     $url.="&hl=en";
     $url.="&safe=off";
     $url.="&pws=0";  //no personalization
+    if(isset($lang)):
+        $url.="&lr=".$lang;
+    endif;
 //    $url.="&filter=0"; //filter duplicates 0 means do not filter
     return $url;
 }
+
 /**
  * returns the regex required to identify a result in a google SERP
  * @return string
@@ -52,6 +59,7 @@ function qibdip_url_google_search($query) {
 function qibdip_regex_google_search_result() {
     return '/<li .*?class="g"><h3\b[^>]*>(.*?)<\/h3>/';
 }
+
 /**
  * Calculate the rank of first appearance of $text in $web after application of $regex
  * @param string $web the url to parse
@@ -61,23 +69,24 @@ function qibdip_regex_google_search_result() {
  * @return string
  * @since 1.3
  */
-function qibdip_get_rank($web,$text,$regex,$notfound=101) {
+function qibdip_get_rank($web, $text, $regex, $notfound = 101) {
     preg_match_all($regex, $web, $matches);
-    $found=false;
-    $rank=0;
-    $matches=$matches[0];
-    $m=array_shift($matches);
-    while(($m)&&(!$found)):
+    $found = false;
+    $rank = 0;
+    $matches = $matches[0];
+    $m = array_shift($matches);
+    while (($m) && (!$found)):
 //        echo "match:".print_r($m,true)."\nrank:".$rank."\nfound:".$found."\n\n";
-        $found=!(stristr($m, $text) === FALSE);
+        $found = !(stristr($m, $text) === FALSE);
         $rank+=1;
-        $m=array_shift($matches);
+        $m = array_shift($matches);
     endwhile;
-    if(!$found):
-        $rank=$notfound;
+    if (!$found):
+        $rank = $notfound;
     endif;
     return $rank;
 }
+
 /**
  * Verify that argument number is the expected and raise an error message when needed.
  * @param integer $num the num of expected arguments
@@ -85,14 +94,33 @@ function qibdip_get_rank($web,$text,$regex,$notfound=101) {
  * @return boolean the argument number equals $num
  * @since 1.3
  */
-function qibdip_verify_argument_number($num,$message="Error!\n") {
-    if($_SERVER['argc']==$num+1):
+function qibdip_verify_argument_number($num, $message = "Error!\n") {
+    if ($_SERVER['argc'] == $num + 1):
         return true;
     else:
         echo $message;
         return false;
     endif;
 }
+
+/**
+ * Verify that argument number is in the expected range and raise an error message when needed.
+ * @param integer $num the minimal num of expected arguments
+ * @param integer $max the max number of expected arguments
+ * @param string $message the message to show in case of error
+ * @return boolean the argument number equals $num
+ * @since 1.5
+ */
+function qibdip_verify_argument_range($num, $max, $message = "Error!\n") {
+    //echo "arguments: ".$_SERVER['argc']."\n";
+    if (($_SERVER['argc'] >= $num + 1) and ($_SERVER['argc'] <= $max + 1)):
+        return true;
+    else:
+        echo $message;
+        return false;
+    endif;
+}
+
 /**
  * Returns a command line argument
  * @param integer $num number of the argument to seek 1 for first (not 0).
@@ -100,8 +128,13 @@ function qibdip_verify_argument_number($num,$message="Error!\n") {
  * @since 1.3
  */
 function qibdip_argument($num) {
-    return $_SERVER['argv'][$num];
+    if ($_SERVER['argc'] >= $num):
+        return $_SERVER['argv'][$num];
+    else:
+        return null;
+    endif;
 }
+
 /**
  * returns the regex required to identify the result count in a google SERP
  * @return string
@@ -111,10 +144,9 @@ function qibdip_regex_google_search_count() {
     return '/<div>results .*of [about ]*.([,0123456789]*).*from/i';
 }
 
-
-function qibdip_get_count($html,$regex) {
-    if(preg_match($regex, $html,$matches)):
-            $resultat=$matches[0];
+function qibdip_get_count($html, $regex) {
+    if (preg_match($regex, $html, $matches)):
+        $resultat = $matches[0];
     endif;
     //print_r($matches);
     return $resultat;
@@ -127,7 +159,7 @@ function qibdip_get_count($html,$regex) {
  * @since 1.4
  */
 function qibdip_facebook_graph_url($id) {
-    return "http://graph.facebook.com/".$id;
+    return "http://graph.facebook.com/" . $id;
 }
 
 /**
@@ -138,6 +170,7 @@ function qibdip_facebook_graph_url($id) {
 function qibdip_facebook_likes($json) {
     return qibdip_facebook_json_parse($json, 'likes');
 }
+
 /**
  * gets the attribute described by attr from a json object
  * @param mixed $json the json object to parse
@@ -145,11 +178,12 @@ function qibdip_facebook_likes($json) {
  * @return string
  * @since v1.4
  */
-function qibdip_facebook_json_parse($json,$attr) {
-    $decoded=json_decode($json, true);
-    if(!isset($decoded[$attr])):
-        exit(1);
+function qibdip_facebook_json_parse($json, $attr) {
+    $decoded = json_decode($json, true);
+    if (!isset($decoded[$attr])):
+        return 0;
     endif;
     return $decoded[$attr];
 }
+
 ?>
