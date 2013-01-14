@@ -1,11 +1,16 @@
 qibdip Zabbix Web and Social Networks
 by qibdip
-version 1.6
+version 1.7
 
 Allows to scan the web by means of Zabbix in order to evaluate the web presence and also social networks value.
+Uses FoursquareAPI.class.php by stephen young stephen@tryllo.com.
 Requires lynx browser installed
 
 The scripts and they usage is explained:
+* ipof.sh: gets domain address using nslookup.
+    Parameters:
+    * monitoring server address
+    * monitoring domain name
 * reviews_yelp.sh Gets the number of reviews on yelp.
     Parameters:
     * monitoring server address

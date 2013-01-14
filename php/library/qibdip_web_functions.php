@@ -38,14 +38,14 @@ function qibdip_get_webpage($url) {
  * @return string the url to retrieve
  * @since 1.3
  */
-function qibdip_url_google_search($query,$lang=null) {
+function qibdip_url_google_search($query, $lang = null) {
     $url = "http://www.google.com/search?q=" . $query;
     $url.="&num=100";
     $url.="&hl=en";
     $url.="&safe=off";
     $url.="&pws=0";  //no personalization
-    if(isset($lang)):
-        $url.="&lr=".$lang;
+    if (isset($lang)):
+        $url.="&lr=" . $lang;
     endif;
 //    $url.="&filter=0"; //filter duplicates 0 means do not filter
     return $url;
@@ -141,14 +141,15 @@ function qibdip_argument($num) {
  * @since 1.4
  */
 function qibdip_regex_google_search_count() {
-    return '/<div>results .*of [about ]*.([,0123456789]*).*from/i';
+//    return '/<div>results .*of [about ]*.([,0123456789]*).*from/i';
+    return '/About ([,0123456789]*) results/i';
 }
 
 function qibdip_get_count($html, $regex) {
     if (preg_match($regex, $html, $matches)):
-        $resultat = $matches[0];
+        $resultat = $matches[1];
     endif;
-    //print_r($matches);
+//    print_r($matches);
     return $resultat;
 }
 
@@ -205,6 +206,7 @@ function qibdip_json_parse($json, $attr) {
  * @since 1.6
  */
 function qibdip_twitter_url($user) {
-    return 'http://api.twitter.com/1/users/show.json?screen_name='.$user;
+    return 'http://api.twitter.com/1/users/show.json?screen_name=' . $user;
 }
+
 ?>
